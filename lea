@@ -1,0 +1,26 @@
+def Count_Emojis(df):
+    all_words = df['msg'].apply(lambda x: extract_emojis(x)).sum()
+    word_count = Counter(all_words)
+     
+    ordered = {}
+    ordered['msg'] = []
+    # Create the columns of the new dataframe with the 50 emojis
+    for key, number in word_count.most_common()[:50]:
+        ordered[key] = []
+    
+    # Fill in the values with the count of the emojis in each sentence
+    for sentence in series:
+        sentence_count = Counter(extract_emojis(sentence))
+        
+        for word in ordered:
+            count = sentence_count[word] if sentence_count[word] else 0
+            ordered[word] += [count]
+    
+    # Just add some categorical variables that I'd like to keep for filtering purposes
+    ordered['msg'] = list(series)
+    ordered['date'] = list(df['date'])
+    ordered['name'] = list(df['name'])
+    ordered['conv_name'] = list(df['conv_name'])
+    
+    return pd.DataFrame(ordered)
+    
